@@ -1,27 +1,51 @@
-# plant.js
+# Plant.js
 
-```JavaScript
-var Plant = require('plant.js');
+> A super lightweight headless browser
 
-var browser = new Plant(); // <- You can pass defaults for request. 
-browser.get('http://www.theuselessweb.com/')
+Plant.js is a super lightweight, promisified headless browser. Despite its
+simplicity, Plant.js has a wide variety of uses.
 
-.then(function($) {
-  console.log($('h3').text()); // USELESS
-  return browser.follow('a:nth-child(2)'); // <- Follows link with this selector
-})
+## Usage
 
-.then(function($) {
-  console.log($('.text-holster h1').text()); // SHUT UP& LOOK
-  browser.get('http://www.theuselessweb.com/');
-})
+Check out the [docs](docs) for the complete API documentation. The code below
+is a small example of what you can do.
 
-.then(function($) {
-  console.log($('h3').text()); // USELESS
-})
+Install using `npm`:
 
-.catch(function(e) {
-  return console.trace(e);
-});
-
+```bash
+$ npm install plantjs
 ```
+
+Let's login to Facebook:
+
+```js
+var Plant = require('plantjs');
+
+var browser = new Plant();
+
+// Visit Facebook's mobile site
+browser
+  .visit('http://m.facebook.com')
+  .then(function ($) {
+    console.log($('title').text()); // -> Welcome to Facebook
+
+    // Get the "email" and "pass" inputs by their name attribute
+    $.by_name('email').val('email@website.com');
+    $.by_name('pass').val('mysecretpassword');
+
+    // Log in to Facebook
+    return browser.submit($('form#login_form'));
+  })
+  .then(function ($) {
+    console.log($('title').text()); // -> Facebook
+    // We're logged in now!
+  })
+  // Catch errors
+  .catch(console.trace);
+```
+
+## How It Works
+
+Plant.js extends [cheerio](http://npmjs.org/package/cheerio), then combines it
+with [request](http://npmjs.org/package/request-promise) for lightweight
+headless browsing. This enables you to use cheerio's powerful library.
