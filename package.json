@@ -1,5 +1,5 @@
 {
-  "name": "plant.js",
+  "name": "plantjs",
   "version": "0.0.1",
   "description": "A super lightweight headless browser",
   "main": "plant.js",
